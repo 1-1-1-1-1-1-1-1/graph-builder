@@ -1,0 +1,1 @@
+* Trapezoidal rule: https://ru.wikipedia.org/wiki/Метод_трапеций (https://en.wikipedia.org/wiki/Trapezoidal_rule)

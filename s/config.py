@@ -1,0 +1,1 @@
+INIT_FUNCTION = "exp(sin(x)) - x/2"

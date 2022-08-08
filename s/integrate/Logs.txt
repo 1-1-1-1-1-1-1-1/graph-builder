@@ -1,0 +1,3 @@
+17.11.2020
+----------
+`two_ie_n(sin, 0, pi, eps=1e-13)` was built in approx. 2780 sec. (\pm < 300)

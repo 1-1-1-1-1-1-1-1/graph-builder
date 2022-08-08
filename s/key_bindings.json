@@ -1,0 +1,8 @@
+{
+	"window": {
+		"<Control-b>": "build()",
+		"<Control-p>": "print_table()",
+		"<Control-h>": "help_message()",
+		"<F1>": "help_message()"
+	}
+}

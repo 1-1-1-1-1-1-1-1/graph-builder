@@ -1,0 +1,26 @@
+{
+    "Парабола": {
+        "x": "t",
+        "y": "t**2",
+        "b": "(-4, 7)",
+        "k": "{'linewidth': 3, 'color': 'yellow', 'times': 100}"
+    },
+    "Похожее на сердце": {
+        "x": "16*sin(t)**3",
+        "y": "13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t)",
+        "b": "(0, 2*numpy.pi)",
+        "k": "{'linewidth': 3, 'color': 'red', 'times': 100}"
+    },
+    "Big Парабола": {
+        "x": "t",
+        "y": "t**2",
+        "b": "(-4, 100)",
+        "k": "{'linewidth': 3, 'color': 'yellow', 'times': 100}"
+    },
+    "bla": {
+        "x": "16*sin(t)**4",
+        "y": "13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t)",
+        "b": "(0, 6.283185307179586)",
+        "k": "{'linewidth': 3, 'color': 'blue', 'times': 100}"
+    }
+}
