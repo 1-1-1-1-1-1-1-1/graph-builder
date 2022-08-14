@@ -1,3 +1,22 @@
+"""Realization of the solving the LAE method(s).
+
+Brief desription
+================
+
+  Realization of the solving the LAE method(s).
+
+Additional data
+===============
+
+  External link: [1].
+
+References
+==========
+
+  .. [1] ...
+"""
+
+
 def iterative_method_solve(matrixA, mB, k):
 	"""Solve the matrix equation Ax=B and return the result.
 

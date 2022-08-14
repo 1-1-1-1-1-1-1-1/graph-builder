@@ -1,24 +1,27 @@
-# What is the best order (and way) of packing such objects? I.e. label,
-# frame etc.
+# QnA: What is the best order (and way) of packing such objects? I.e. the label,
+#      frame, etc.
 
 # Some comments
 # -------------
+# 
 # Possible for the `func`:
 # weierstrass_function(3, 1/2, maxn='default', borders=[-2, 3])(x)
 # cos(x)+x*(-1+x+2*sin(x))  # Ilia
 
-# Possible tasks
-# ==============
+# Possible tasks (dev.)
+# =====================
+# 
 # * Add an option to make `undo`, possibly logging all history of entry's,
 #   such as entrying of function, borders, choosing the alpha.
 # * Help m.
 
 # QUESTIONS
 # =========
+# 
 # * Should here be named as `interpolation` or as `approximation`?
 #   + Some name strangnesses can be connected with it!
 
-'''
+''' Scheme and scratch {for / of} the window:
 _______________
 |function (and var.) + xborders
 |——————————————————————————————————————
@@ -44,19 +47,24 @@ import tkinter.messagebox as mbox
 from tkinter.filedialog import asksaveasfilename, askdirectory
 from os import mkdir, listdir, sep as os_sep, altsep
 from os.path import join, splitext, split
+from pathlib import Path
+from datetime import datetime  # logging
+import typing  # TODO
+# from typing import ...  # NoReturn, ...
+from ._typing import NoReturn
 
 from sympy import *  # sin, cos etc.
 import configparser
 
-from functions import *
-from addings import weierstrass_function
-from functions import test as _build
-from tests import whole_test as _print_table
-from config import INIT_FUNCTION
+from .functions import *
+from .addings import weierstrass_function
+from .functions import test as _build
+from .tests import whole_test as _print_table
+from .config import INIT_FUNCTION, package
 
 
 c = configparser.ConfigParser()
-c.read('window.ini')
+c.read(f'{package}/window.ini')
 
 '''
 # Function
@@ -142,7 +150,7 @@ BUILD_OPTION_DEFAULT = get_default(c['graph'], BUILD_OPTIONS,
 GRAPH_MODES_POSSIBLE = ["Don't save", "Save always", "Ask"]
 GRAPH_MODE_DEFAULT = c.get('graph', 'save_graph_mode')
 BUILD_SAVE_NAME_DEFAULT = c.get('graph', 'build_save_name_default')
-# Build par. - ?
+# Q: Build paramaters -- ?
 
 # Table's printing
 DEFAULT_ALPHA = eval(c['print_table']['alpha'])
@@ -157,7 +165,7 @@ LOGGING_FILE = section['logging_file']
 
 TMP_CONFIGS = section['tmp_configs']
 
-KEY_BINDINGS_FILE = section['key_bindings']
+KEY_BINDINGS_FILE = Path(package) / section['key_bindings']
 
 assert GRAPH_MODE_DEFAULT in GRAPH_MODES_POSSIBLE
 
@@ -186,8 +194,7 @@ def log_info(info, *, file=LOGGING_FILE):
     info += '\n'
 
     def ctime():
-        from datetime import datetime
-        return datetime.now().strftime('%d.%m.%Y %H:%M:%S')
+        return datetime.now().strftime('[%d.%m.%Y %H:%M:%S]')
 
     add_eol = False
     with open(file, encoding='utf-8') as f:
@@ -197,22 +204,26 @@ def log_info(info, *, file=LOGGING_FILE):
     with open(file, 'a', encoding='utf-8') as f:
         if add_eol:
             f.write('\n')
-        f.write(ctime() + ' | ' + info)
+        f.write(ctime() + ' ' + info)
 
 
-def upper_first(string):
+def upper_first(string: str) -> str:
+    """Transform the first letter to the uppercase (do not change the string).
+    Example: "some TexT: words" -> "Some TexT: words"."""
     return string[:1].capitalize() + string[1:]
 
-def error_log(title, info):  #~
+
+def error_log(title: str, info: str) -> NoReturn:  #~
     log_info(title + info)
     mbox.showerror("Error", upper_first(info))
 
 
-def key_bindings():
+def key_bindings() -> dict:
     import json   # // In a form `"<binding>": "<...>"`
 
     with open(KEY_BINDINGS_FILE, encoding='utf-8') as f:
         return json.load(f)
+
 
 WINDOW_KEY_BINDINGS = key_bindings()['window'].items()
 
@@ -487,6 +498,7 @@ Try using `newton_polynomial_forward` instead.")
         mbox.showinfo("Timing", info, parent=root)
     root.mainloop()
 
+
 def help_message():
     __k_bindings = {}
     for key, value in WINDOW_KEY_BINDINGS:
@@ -534,7 +546,7 @@ def react_interpolator_choose():
 
 
 window = Tk()
-window.title("Local helper")
+window.title("Local helper (Copyright The STUDENT Mykola Heneralov, y. 2020–2022)")
 
 # Tests: config
 # window.geometry('300x250')
@@ -576,7 +588,7 @@ frame22 = Frame(lframe2)
 frame23 = Frame(lframe2)
 frame21.pack(side='top', fill='x'); frame22.pack(side='top', fill='x'); frame23.pack(side='top', fill='x')
 
-label_interp = Label(frame21, text='Interpolate by')
+label_interp = Label(frame21, text='Interpolate with')
 label_interp.pack(side='left')
 interp_choose = ttk.Combobox(frame21, values=ALL_INTERPOLATORS, state="readonly",
     width=40)
@@ -721,7 +733,7 @@ alpha_group = Frame(table_print)
 alpha_group.pack()
 
 alpha_is_random = IntVar(value=1 if DEFAULT_ALPHA is None else 0)
-def config_alpha_choose():  #?
+def config_alpha_choose() -> typing.NoReturn:  #?
     state = 'disabled' if alpha_is_random.get() else 'normal'
     alpha_choose.configure(state=state)
 alpha_random = Checkbutton(alpha_group, text="alpha is random   ",

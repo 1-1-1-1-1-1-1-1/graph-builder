@@ -1,3 +1,17 @@
+################################################################################
+###########################  !~~~ TO READ ~~~!  ################################
+##            ~    ~        ~ ~~           ~~ ~         ~ ~                   ##
+## This file was earlier at the root (there were also: the __init__.py, the   ##
+## ;__main__.py, the functions.py. Then the root (that folder) has been       ##
+## transformed to the package, and no longer the need of saving this exact    ##
+## file at that folder exist. This file's interpreting may normally be not    ##
+## supported by Python [3+] since the fact the dot notation may be broken     ##
+## when running from __main__, but this should be run from the __main__ only. ##
+## This file was moved to the folder ./test with a respect to that folder.    ##
+## The respective folder test/ had already existed before.                    ##
+################################################################################
+################################################################################
+
 # Should these be?: single_test, local_test, null_test.
 
 
@@ -6,12 +20,12 @@ from math import *
 from numpy import linspace
 from sympy import lambdify, symbols
 
-from spline import cubic_spline
-from functions import *
-from tdma import *
-from helpers import *
-from helpers.graph_builder import main, main_mod
-from config import INIT_FUNCTION  # Should be so?
+from ..spline import cubic_spline
+from ..functions import *
+from ..tdma import *
+from ..helpers import *
+from ..helpers.graph_builder import main, main_mod
+from ..config import INIT_FUNCTION  # Should be so?
 
 
 ALL_TESTED = [("lagrange_polynomial", "LAGRANGE POLYNOMIAL"),
@@ -19,7 +33,8 @@ ALL_TESTED = [("lagrange_polynomial", "LAGRANGE POLYNOMIAL"),
               ("cubic_spline", "NATURAL CUBIC SPLINE")
               ]
 
-# Earlier was in `__init__.py`:
+
+# Earlier was at `__init__.py`:
 def inittest_table(_func, x_points, *, by_func="lagrange_polynomial",
                    extra_info=None, test_points=None, alpha=None):
     print("                    ",
@@ -61,7 +76,8 @@ def inittest_table(_func, x_points, *, by_func="lagrange_polynomial",
                           lines, header=tuple(header)
                           )))
 
-# Earlier was in `__init__.py`:
+
+# Earlier was at `__init__.py`:
 def single_test(number):
     def single_test_1(func=sin):
         print(lagrange_polynomial(func, linspace(0, pi, 11))(0.1))
@@ -82,7 +98,8 @@ def single_test(number):
 
     return eval('single_test_' + str(number))()
 
-# Earlier was in `__init__.py`:
+
+# Earlier was at `__init__.py`:
 def whole_test(borders=(-10, 10), n: int = 30, alpha=0.5,
                func: str = INIT_FUNCTION,
                tested=ALL_TESTED, _id=None):
@@ -297,6 +314,7 @@ def null_test():
     build([(x, [approx(_x) for _x in x], kwargs)])
 
     raise SystemExit
+
 
 if __name__ == '__main__':
     # From `__init__`:

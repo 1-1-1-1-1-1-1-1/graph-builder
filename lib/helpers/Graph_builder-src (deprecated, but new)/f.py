@@ -12,7 +12,8 @@ from sympy import cos, sin #t
 
 # PASS is_gridded = __import__('configparser').ConfigParser() # Used just ones.
 
-# ~~~~~~~~~~~~~~~~~~~ Some helpful functions ~~~~~~~~~~~~~~~~~~~ #
+
+# ~~~~~~~~~~~~~~~~~~~ ----  Several helpful functions  --- ~~~~~~~~~~~~~~~~~~~ #
 
 def wdd(any_function): # wdd - "warning deprecation" decorator
     def dw(*args, **kwargs): # dw - deprecation warning
@@ -23,7 +24,7 @@ maybe_deprecated = deprecated = wdd
 
 
 @maybe_deprecated
-def isvar(s, *, version = 1):
+def isvar(s, *, version=1):
     SUPPORTED_ISVAR_VERSIONS = (1, 2) # If not deprecating this function and letting it exist, this should be in a global.
     import re
     assert any(map(lambda x: x is version, SUPPORTED_ISVAR_VERSIONS))

@@ -14,15 +14,18 @@ __all__ = ['_cubic_spline_natural', 'cubic_spline']
 
 from sympy import symbols, Matrix, solve_linear_system
 
-from tdma import solve_tdma_fast as tdma
+from .tdma import solve_tdma_fast as tdma
+from ._typing import (Union, NoReturn, Iterable, Callable,
+                      Number, NormalFunc)
 
 
-def _cubic_spline_natural(func, nodes, x, *, method=2):
+def _cubic_spline_natural(func: NormalFunc, nodes: Iterable, x: Number,
+                          *, method=2):
     """Return the cubic spline's value for a given function at point `x`.
 
     Spline's type: natural.
     """
-    nodes = sorted(nodes)
+    nodes: Iterable = sorted(nodes)
     n = len(nodes) - 1
 
     def h(i):
@@ -69,7 +72,7 @@ def _cubic_spline_natural(func, nodes, x, *, method=2):
     return _spline(k)
 
 
-def cubic_spline(func, nodes, *, method=2) -> callable:
+def cubic_spline(func: NormalFunc, nodes: Iterable, *, method=2) -> NormalFunc:
     """Return the natural cubic spline."""
     return lambda x: _cubic_spline_natural(func, nodes, x, method=method)
 
@@ -77,9 +80,9 @@ def cubic_spline(func, nodes, *, method=2) -> callable:
 ### Tests -------
 
 
-from helpers.graph_builder import main_mod
+from .helpers.graph_builder import main_mod
 
-from helpers import expand
+from .helpers import expand
 
 
 INIT_FUNCTION = "exp(sin(x)) - x/2"
@@ -87,7 +90,7 @@ INIT_FUNCTION = "exp(sin(x)) - x/2"
 
 def inittest(func, borders,
              form_space="linspace(*borders, splines_n)",
-             *, splines_n=7, k=1.2, method=2):
+             *, splines_n=7, k=1.2, method=2) -> NoReturn:
     """Build 2 graphs: of `func` and its approximation."""
     space = eval(form_space)
     approx = cubic_spline(func, space, method=method)

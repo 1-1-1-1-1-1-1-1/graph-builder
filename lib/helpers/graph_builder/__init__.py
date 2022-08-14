@@ -1,6 +1,9 @@
-import matplotlib.pyplot as plt
+# Functions: `_build_graph', `main', `main_mod'.
 
+
+import matplotlib.pyplot as plt
 from sympy import symbols, lambdify
+from collections.abc import Iterable
 
 
 def _build_graph(x, y, grid_plot=True, **build_kwargs):
@@ -12,7 +15,7 @@ def _build_graph(x, y, grid_plot=True, **build_kwargs):
     ax.grid(grid_plot)
 
 
-def main(iterable, grid_plot=True, *, block=True, show=True):
+def main(iterable: Iterable, grid_plot=True, *, block=True, show=True):
     """Build the graph of each function from `iterable` in one window."""
     global ax
     fig, ax = plt.subplots()
@@ -24,8 +27,8 @@ def main(iterable, grid_plot=True, *, block=True, show=True):
         return fig
 
 
-def main_mod(x, iterable, kwargs=None, grid_plot=True, form_type='default',
-             mode='update', *, block=True, show=True):
+def main_mod(x, iterable: Iterable, kwargs=None, grid_plot=True,
+             form_type='default', mode='update', *, block=True, show=True):
     """Modified version of `main`.
 
     `x` : iterable of x's (numbers) to build the graph.
@@ -98,7 +101,12 @@ if __name__ == '__main__':
     from numpy import *
 
 
-def test(parts):
+def test(parts: Iterable):
+    # Build graphs and return None.
+    #
+    # :param:`parts` depending only whether 1, 2, 3 or 4 are included to it.
+    #     Tests with the mentioned at `parts` IDs should be complited.
+    
     from numpy import linspace
     from sympy import sin, cos, exp
 

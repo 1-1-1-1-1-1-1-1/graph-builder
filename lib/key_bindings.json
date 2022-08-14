@@ -4,5 +4,9 @@
 		"<Control-p>": "print_table()",
 		"<Control-h>": "help_message()",
 		"<F1>": "help_message()"
+	},
+	"Mac": {
+		"inherit": ["window"],
+		"<Command-,>": "help_message()"
 	}
 }

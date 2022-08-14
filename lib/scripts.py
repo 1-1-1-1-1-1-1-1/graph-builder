@@ -9,8 +9,9 @@ import sys
 
 from sympy import *  # tests
 
-from helpers.graph_builder import main_mod as build_graph
-from functions import *
+from .helpers.graph_builder import main_mod as build_graph
+from .functions import *
+# from _typing import ...  # NoReturn, ...
 
 
 APPROXIMATORS = {'npf': 'newton_polynomial_forward',

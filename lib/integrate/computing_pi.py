@@ -13,15 +13,24 @@ r'''
 from trapezoidal_rule_functions import simpson_rule
 
 
-def simpson_rule_modified(func, a, b, *, n=2, start_eps=1, end_at=1e-15):
+def simpson_rule_modified(func, a, b, *, n=2, start_eps=1, end_at=1e-15,
+                          mode='both'):
     """Docs. from init:
 
     Return the estimated value of the integral of func from a to b,
     a and b are finite, with error, ideologically less then eps
     (maybe it is not really so).
 
-    `n` — initial number of parts.
-    `eps` — positive integer, ...
+    Parameters
+    ===========
+    
+      `n` — initial number of parts.
+      `eps` — positive integer, ...
+      `mode`: whether print the result.
+
+    Return
+    ======
+      The estimated value of the integra of func from `a' to `b'.
     """
     assert start_eps > 0
     '''
@@ -33,6 +42,10 @@ def simpson_rule_modified(func, a, b, *, n=2, start_eps=1, end_at=1e-15):
     h_1 = None
     _v_2 = None  # New
     h_2 = None
+
+    if mode == 'both':
+        mode = ('yield', 'print')
+    should_print = 'print' in mode        
 
     _v_2 = (func(a) + func(b))/2
 
@@ -73,8 +86,12 @@ def simpson_rule_modified(func, a, b, *, n=2, start_eps=1, end_at=1e-15):
         eps /= 10
         if not is_first_print:
             number = "".join(list(number)[-(-printed+1):])
-        actual, other = re.fullmatch(r'(-?[0-9\.]*?)([0\.9]*)', number).groups()
-        print(actual, end='')
+        
+        regexp: str = r'(-?[0-9\.]*?)([0\.9]*)'
+        actual, other = re.fullmatch(regexp, number).groups()
+        
+        yield actual
+        if should_print: print(actual, end='')
         printed = -len(other.replace('.', ''))
         digits = list(other)
         if is_first_print:
@@ -86,7 +103,6 @@ def simpson_rule_modified(func, a, b, *, n=2, start_eps=1, end_at=1e-15):
         for i in digits: print(i, end='')
     return
 
-
     res = h_2/3 * 2*_v_2
     if return_mode == 0:
         return res
@@ -95,8 +111,9 @@ def simpson_rule_modified(func, a, b, *, n=2, start_eps=1, end_at=1e-15):
     if return_mode >= 1:
         res.append(n)
     if return_mode >= 2:
-        res.append((h_2))
+        res.append(h_2)
     return res
+
 
 def main_v1():
     _v_1 = None  # Old
@@ -110,10 +127,15 @@ def main_v1():
 
     # Add `even`:
     _v_2 += sum(func(a + (2*k)*h_2) for k in range(1, n))
-    # Add `Odd`:
+    # Add `odd`:
     odd = sum(func(a + (2*k-1)*h_2) for k in range(1, n+1))
     _v_2 += 2*odd
 
-if __name__ == '__main__':
+
+def compute_pi(end_at: float = 1e-16) -> ...:
     func = lambda t: 4/(1+t**2)
-    simpson_rule_modified(func, 0, 1, end_at=1e-16)
+    return simpson_rule_modified(func, 0, 1, end_at=end_at)
+    
+
+if __name__ == '__main__':
+    list(compute_pi())

@@ -1,13 +1,22 @@
 """This module realises the Lagrange and Newton polynoms interpolations
 and provides the cubic spline (natural) -- see module `spline`.
 
+Important
+=========
+  NOTE: Use numba.jit (commented) to possibly speed up, if the appropriate
+        software is available on the machine.
+
 Currently realised:
+-------------------
+
 `newton_polynomial_forward`,
 `newton_polynomial_forward_equidistant`,
 `lagrange_polynomial`,
 `cubic_spline`.
 
     Usage:
+    ======
+    
     `<function>(<func: callable>, arg/args)` ->
         `<function: callable>`,
     where arg/args is `a, b, n` for newton_polynomial_forward_equidistant
@@ -15,12 +24,24 @@ Currently realised:
 
     This module also provides `displaced_nodes`, `chebyshev_nodes` and
     `linspace` (from `numpy`).
+
+References:
+===========
+
+  .. [1] See all links at this work/project/repository.
 """
 
-# Comments syntax is partially LaTeX (marked with `$`).
-# Should the assertion of a straight nodes' order be?
-# `numba` can be used to speed up.
-# What is the difference of Newton forward and str. pol.?
+# ~~~ Comments for developer. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# > St. marks the 'statement'.
+# 
+# St.#1: At this work / file: Comments' syntax is partially LaTeX (marked with `$`).
+# St.#2: `numba` can be used to speed up.
+# Q#1: Should the assertion of a straight nodes' order be?
+# Q#2: What is the difference of Newton forward and str. pol.?
+# A#2: There is not different in classic Python. There is a different, if the
+#      result is being cached: then adding nodes may be faster then without
+#      caching. That way matters, where the nodes are added: left or right.
+#      Depending on this, the function type *matter*.
 
 
 __all__ = [# Newton polynomial:
@@ -34,20 +55,26 @@ __all__ = [# Newton polynomial:
            'chebyshev_nodes', 'displaced_nodes', 'linspace'
            ]
 
-# From `spline`:
-__all__ += __import__("spline").__all__
-
 
 from math import pi, cos
 
 from numpy import linspace
 # import numba
 
-from helpers import expand, product, displaced_nodes
-from spline import *
+from .helpers import expand, product, displaced_nodes
+from .spline import *
+from ._typing import (Number)
+
+from .spline import __all__ as sp_all
 
 
-def chebyshev_nodes(a, b, n):
+# From `spline`:
+__all__ += sp_all
+
+del sp_all
+
+
+def chebyshev_nodes(a, b, n) -> list[Number]:
     """n Chebyshev nodes in interval [a, b].
 
     Their order here is straight.
@@ -122,10 +149,10 @@ def _newton_polynomial_forward(func, x_points, x, *, version=2.2):
                    for j in range(len(x_points)))
 
     if version == 2.1:
-        # Copied from the code, which was in the meeting.
+        # Copied from the code, which had been shown on the meeting.
         # (With only editions to realise style.)
 
-        # Ranges - ?
+        # Ranges -- ?
 
         n_ = len(x_points)
         xi = x_points  #?
@@ -138,8 +165,9 @@ def _newton_polynomial_forward(func, x_points, x, *, version=2.2):
             fd[i] = fi1[i]
         for i in range(1, n_):
             for k in range(i, n_):
-                fd[k] = (fi1[k] - fi1[k-1]) /\
-                    (xi[k] - xi[k-i])
+                fd[k] = ((fi1[k] - fi1[k-1]) /\
+                       # -------------------
+                          (xi[k] - xi[k-i]))
             for k in range(i, n_):
                 fi1[k] = fd[k]
         N = fi1[0]
@@ -156,8 +184,9 @@ def _newton_polynomial_forward(func, x_points, x, *, version=2.2):
         fi = [func(point) for point in x_points]
         for i in range(1, n_):
             for k in reversed(range(i, n_)):
-                fi[k] = (fi[k] - fi[k-1]) /\
-                    (xi[k] - xi[k-i])
+                fi[k] = ((fi[k] - fi[k-1]) /\
+                       # -----------------
+                         (xi[k] - xi[k-i]))
         N = fi[0]
         for i in range(1, n_):
             xx = 1
@@ -222,10 +251,18 @@ def lagrange_polynomial(func, x_points) -> callable:
     return lambda x: _lagrange_polynomial(func, x_points, x)
 
 
-# --- Tests ------------------------------
+# --- Tests --------------------------------------------------------------------
 
 
-# To test: abs
+# To test: abs [^1].
+#
+# [^1]: Why should this be tested.
+# --------------------------------
+# the Runge's phenomenon happens to the `abs`
+# function (in particular), hence ensuring the function with that function
+# works correctly means the function is preveting the Runge's phenomenon.
+# Refering to
+# [Runge's phenomenon](https://en.wikipedia.org/wiki/Runge%27s_phenomenon/).
 def test(func: callable, xborders=(-10, 10),
          approx_by=lagrange_polynomial,
          form_args: str = "(chebyshev_nodes(*xborders, nodes_n),)",
@@ -274,20 +311,19 @@ def test(func: callable, xborders=(-10, 10),
 
 
 if __name__ == '__main__':
-    '''
-    test(func=abs, xborders=(-1, 1),
-         approx_by=lagrange_polynomial,
-         test_in_points=None,
-         build=True, build_params={'borders': 0.9, 'times': 100},
-         nodes_n=7,
-         form_args="(linspace(*xborders, nodes_n),)")
-    '''
-    # test(func=abs, xborders=(-1, 1),
-    #      approx_by=newton_polynomial_forward,
-    #      test_in_points=None,
-    #      build=True, build_params={'borders': 0.9, 'times': 100},
-    #      nodes_n=7,
-    #      form_args="(chebyshev_nodes(*xborders, nodes_n),)")
+##    test(func=abs, xborders=(-1, 1),
+##         approx_by=lagrange_polynomial,
+##         test_in_points=None,
+##         build=True, build_params={'borders': 0.9, 'times': 100},
+##         nodes_n=7,
+##         form_args="(linspace(*xborders, nodes_n),)")
+    
+##    test(func=abs, xborders=(-1, 1),
+##         approx_by=newton_polynomial_forward,
+##         test_in_points=None,
+##         build=True, build_params={'borders': 0.9, 'times': 100},
+##         nodes_n=7,
+##         form_args="(chebyshev_nodes(*xborders, nodes_n),)")
     nodes_n = 40
     test(func=abs, xborders=(-1, 1),
          approx_by=newton_polynomial_forward,

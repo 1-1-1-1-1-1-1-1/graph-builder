@@ -11,10 +11,10 @@ from numpy import pi
 # from sympy import cos
 from numpy import cos
 
-from functions import *
-from spline import *
-from helpers.graph_builder import main_mod as build
-from helpers import expand
+from .functions import *
+from .spline import *
+from .helpers.graph_builder import main_mod as build
+from .helpers import expand
 
 
 def weierstrass_function(a, b, maxn='default', *, borders=None):

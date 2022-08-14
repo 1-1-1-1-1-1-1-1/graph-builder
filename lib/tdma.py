@@ -1,11 +1,38 @@
+"""Realization of the TDMA.
+
+Brief desription
+================
+
+  Realization of the TDMA.
+
+Additional data
+===============
+
+  External link: [1].
+
+References
+==========
+
+  .. [1] https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm
+"""
+
+
+# TODO Test typing everywhere.
+
+
 __all__ = ['solve_tdma', 'solve_tdma_fast']
 
 
-def solve_tdma(a, b, c, f):
+from ._typing import (Union, Generator,
+                     Number, Vector)
+
+
+def solve_tdma(a, b, c, f: Vector) -> Vector:
     """Solve the matrix equation with tridiagonal matrix at left part.
 
-    Realise the TDMA. `b` is the main diagonal, `a` is the lower, `c` is the 
-    upper. `f` is the right part.
+    Realisation the TDMA. Here:
+     * `b` is the main diagonal, `a` is the lower, `c` is the upper.
+     * `f` is the right part.
     """
     alpha = [0]
     beta = [0]
@@ -13,7 +40,7 @@ def solve_tdma(a, b, c, f):
     assert len(a) == n-1 and len(b) == n and \
         (len(c) == n-1 or len(c) == n and c[-1] == 0)
     x = [None]*n
-    a = [0] + a  # Compatibility for computing the alpha.
+    a = [0] + a  # Compatability for computing the alpha.
 
     for i in range(n-1):
         den = a[i]*alpha[i] + b[i]
@@ -30,7 +57,7 @@ def solve_tdma(a, b, c, f):
 
 def _solve_tdma_fast(a, b, c, f):
     n = len(f)
-    a = [0] + a  # Compatibility for computing the alpha.
+    a = [0] + a  # Compatability for computing the alpha.
 
     alpha = [0]
     beta = [0]
@@ -45,9 +72,11 @@ def _solve_tdma_fast(a, b, c, f):
     for i in reversed(range(1, n)):
         yield (_ := alpha[i]*_ + beta[i])
 
-def solve_tdma_fast(a, b, c, f):
-    """Maybe faster working implementation of TDMA.
-    See the docs of `solve_tdma` for more info."""
+
+def solve_tdma_fast(a, b, c, f: Vector) -> Generator[Number]:
+    """Probably the faster working implementation of the TDMA.
+    See the docs for ``solve_tdma'' for more info.
+    """
     n = len(f)
     assert len(a) == n-1 and len(b) == n and \
         (len(c) == n-1 or len(c) == n and c[-1] == 0)
@@ -58,8 +87,8 @@ def solve_tdma_fast(a, b, c, f):
 
 
 def inittest():
-    import sympy
     from time import time as t
+    import sympy
 
     def show_time(action_id="", *, reload_t0: bool=True):
         nonlocal t0
