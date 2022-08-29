@@ -1,5 +1,6 @@
 # Tasks
 # =====
+# 
 # * ! Gauss method (2-3 nodes; 2 nodes and composed formula).
 #   (for integrating)
 # * Rename from bad! Give normal names, not `one`, `two` etc.
@@ -12,8 +13,8 @@
 
 # Questions
 # =========
+# 
 # * In this counts: v_1 or v_2? What value is better to return?
-# * Stacklevel at warnings: correct?
 
 
 # __all__ = []
@@ -29,6 +30,7 @@ WARN = False
 
 def one(func, a, b):
     return (func(a) + func(b))/2*(b-a)
+
 
 # Is it deprecated?
 def multiple_trapezoidal_rule_finite_v0(func, a, b, *, start_from=2, eps):
@@ -105,6 +107,7 @@ def multiple_trapezoidal_rule_finite_v1(func, a, b, *, n='default', eps):
 
     return h_2 * _v_2
 
+
 # def simpson_rule_action(): ...
 def simpson_rule(func, a, b, *, n=2, eps, return_mode=0):
     """Return the estimated value of the integral of func from a to b,
@@ -117,7 +120,7 @@ def simpson_rule(func, a, b, *, n=2, eps, return_mode=0):
     assert eps > 0
     eps /= 15
     if eps < 1e-14 and WARN:
-        warnings.warn("Using small `eps` can cause non-original behaviour.",
+        warnings.warn("Using small `eps` may cause non-original behaviour.",
             stacklevel=2)
     _v_1 = None  # Old
     h_1 = None
@@ -170,15 +173,19 @@ def simpson_rule(func, a, b, *, n=2, eps, return_mode=0):
 def single_test():
     print(simpson_rule(lambda t: 4/(1+t**2), 0, 1, eps=1e-12))
 # single_test()
+
+
 def test_trapezoidal_v0(eps=1e-13):
     from numpy import sin, pi
 
     return multiple_trapezoidal_rule_finite_v0(sin, 0, pi, eps=eps)
 
+
 def test_trapezoidal_v1(eps=1e-13, n='default'):
     from numpy import sin, pi
 
     return multiple_trapezoidal_rule_finite_v1(sin, 0, pi, n=n, eps=eps)
+
 
 def test_simpson_rule(func=None, a=None, b=None, eps=1):
     from math import sin
@@ -188,6 +195,7 @@ def test_simpson_rule(func=None, a=None, b=None, eps=1):
         func = sin
         a, b = 0, pi
     return simpson_rule(func, a, b, eps=eps)
+
 
 from sympy import oo  # test
 from sympy import atan
@@ -216,6 +224,7 @@ def test_integrate(_func, a, b, by_func=simpson_rule, *, k='0.99', n=2, eps):
     res = by_func(func, 0.01, b, n=n, eps=eps)
 
     return res
+
 
 def pre__for_infinite(eps=1):
     NotImplemented
@@ -275,6 +284,7 @@ def pre__for_infinite(eps=1):
         print(abs(h_1*_v_1 - h_2*_v_2))
 
     return h_2*_v_2
+
 
 def test_after_change_toplusinfty(func, from_, *, eps=1e-3):
     func_1 = lambda x: func(x-from_)

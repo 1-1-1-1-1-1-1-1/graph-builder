@@ -1,3 +1,12 @@
+"""Addings for the tool. Additional at all.
+
+Realised:
+---------
+
+ - The Weierstrass function.
+ - The display of the Weierstrass function on the graph plot.
+"""
+
 # About the Weierstrass function:
 # * https://en.wikipedia.org/wiki/Weierstrass_function
 # * https://ru.wikipedia.org/wiki/Функция_Вейерштрасса
@@ -11,13 +20,30 @@ from numpy import pi
 # from sympy import cos
 from numpy import cos
 
-from .functions import *
-from .spline import *
-from .helpers.graph_builder import main_mod as build
-from .helpers import expand
+from .interpolate import *
+from .interpolate.spline import *
+from .graph_builder import main_mod as build
+from ._helpers import expand
+from ._metas import InternalException
+from ._typing import Optional, Literal
 
 
 def weierstrass_function(a, b, maxn='default', *, borders=None):
+	if borders is None:
+		borders = [-2, 2]
+	
+	def _is_number(_x) -> Optional[Literal[1, 2]]:
+		t = type(_x)
+		if t is int or t is float:
+			return 1
+		if t is complex:
+			return 2
+	
+	if type(borders) not in (list, tuple) or \
+		len(borders) != 2 or \
+		all(not _is_number(borders[i]) for i in (1, 2)):
+			raise InternalException("Borders should match (a, b)"
+					        " or [a, b]")
 	if maxn == 'default':
 		from math import log
 		# Not to cause the error with math:
@@ -35,8 +61,8 @@ def display(a, b, borders, *, maxn='default'):
 
 	build(linspace(*expand(borders, 0.99), 100),
 		  [(func, dict(color='green')),
-		      (cubic_spline(func, space), dict(color='red')),
-		      (lagrange_polynomial(func, space), dict(color='blue'))])
+			  (cubic_spline(func, space), dict(color='red')),
+			  (lagrange_polynomial(func, space), dict(color='blue'))])
 	'''
 	return func
 

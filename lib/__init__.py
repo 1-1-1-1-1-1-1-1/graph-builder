@@ -5,5 +5,5 @@ from .config import package
 
 
 exec(f"import {package}.\
-inwindow")
+inwindow_interpolation")
 

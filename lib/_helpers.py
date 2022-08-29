@@ -5,9 +5,15 @@ __all__ = ['product', 'displaced_nodes', 'expand', 'mktitle', 'table']
 
 
 from typing import Iterable, Tuple, Union, Generator
+from ._typing import NoReturn, Callable, Optional, Number
 
 
-def product(iterable):
+N = Number  # Should be a number from 0 to 1...
+
+random = __import__("random").random
+
+
+def product(iterable: Iterable[Number]) -> Number:
     """Return product of all items of iterable.
     Example: [2, 2, 5] -> 20.
     """
@@ -17,9 +23,13 @@ def product(iterable):
     return res
 
 
-def displaced_nodes(nodes, *, alpha=__import__("random").random):
+def displaced_nodes(nodes, *,
+                    alpha: Union[Callable[[], N], N] = random):
     """Return displaced nodes (number 1 less than initial).
-    `alpha` is callable or number.
+
+    `alpha` : is either callable or number.
+              If number: should be `0 <= alpha <=1`.
+              If callable: should return number from 0 to 1
     """
     tmp = nodes.copy()
     tmp.sort()
@@ -42,12 +52,12 @@ def expand(borders, k):
     `borders` is iterable object of length 2, `k` is a number.
     Returns borders with symmetrically enlarged in `k` times length.
 
-    Example:
-    -------
-    >>> expand((0, 10), k=1.2)
-    (-1.0, 11.0)
-    >>> expand((0, 10), k=-1)
-    (10.0, 0.0)
+    Examples:
+    
+        >>> expand((0, 10), k=1.2)
+        (-1.0, 11.0)
+        >>> expand((0, 10), k=-1)
+        (10.0, 0.0)
     """
     # l, u = borders
     # m = (l + u)/2  # Not essential.
@@ -67,6 +77,7 @@ def expand(borders, k):
 
 def mktitle(words: str, n, row=None, *, sep='='):  # `row` - ?
     assert len(sep) == 1
+    
     def _align(string, n_times, *, by_symbol=" "):
         # If trying `"{:=...}".format(str(...))`
         # (with exact values intead of '...'): 
@@ -74,6 +85,7 @@ def mktitle(words: str, n, row=None, *, sep='='):  # `row` - ?
         n_ = n_times - len(string)
         return by_symbol * (n_ // 2) + string \
              + by_symbol * ((n_ + 1) // 2)
+    
     return \
 """\
 #{2}{0}{2}#{row}
@@ -83,12 +95,12 @@ def mktitle(words: str, n, row=None, *, sep='='):  # `row` - ?
            row='\n# ' + ' '*n + ' #' if row is not None else '')
 
 
-def table(lines: Iterable[Tuple], header: Union[Tuple[str], None], sep="=") ->\
-              Union[Generator, None]:
-    """Make a table. Returns `None` or a generator object, consisting
+def table(lines: Iterable[Tuple], header: Optional[Tuple[str]], sep="=") \
+    -> Optional[Generator]:
+    """Make a table. Return either `None`, or a generator object, consisting
     from lines.
 
-    ...  # <Some documentation>
+    TODO Write examples [possibly doc].
     """
     # Preperation:
 
@@ -103,16 +115,14 @@ def table(lines: Iterable[Tuple], header: Union[Tuple[str], None], sep="=") ->\
         assert len(sep) == 1
 
     if not lines:
-        return None
+        return
 
     counts = len(lines[0])
     for line in lines:
         if len(line) != counts:
             raise SyntaxError("Wrong data was input.")
 
-    # ---
-
-    def _length(n):
+    def _length(n: int) -> int:
         return max(len(repr(line[n])) for line in lines + tmp_item)
 
     length = [_length(n) for n in range(counts)]
@@ -135,7 +145,8 @@ def table(lines: Iterable[Tuple], header: Union[Tuple[str], None], sep="=") ->\
 
 # -- Tests -------
 
-def test(borders=(0, 10), k=None):
+
+def test(borders=(0, 10), k=None) -> NoReturn:
     print(expand(borders, k))
 
 

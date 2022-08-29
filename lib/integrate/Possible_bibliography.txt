@@ -1,4 +1,0 @@
-* http://www.electro-vgsha.narod.ru/Biblioteka/Chislennye_metody.pdf (c. 72)
-* https://ru.wikipedia.org/wiki/Правило_Рунге
-* https://encyclopediaofmath.org/wiki/Runge_rule
-* "Правило Рунге": https://studfile.net/preview/2640020/page:2/

@@ -127,8 +127,7 @@ def test(parts: Iterable):
         main_mod(x, [sin, cos, lambda x: 1/(1+x**2), lambda x: exp(-x**2 / 2)])
 
     if 4 in parts:
-        from functions import chebyshev_nodes, lagrange_polynomial
-
+        from ..interpolate import chebyshev_nodes, lagrange_polynomial
         
         def _color(n):
             def helpfunc(n):

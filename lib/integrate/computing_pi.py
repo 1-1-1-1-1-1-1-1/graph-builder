@@ -1,6 +1,8 @@
-"""Docs"""
+"""Docs."""
 
-r'''
+r''' # Src idea
+       ^^^^^^^^
+
  1                    1
  /                    /
  |  dx     pi         |  4
@@ -10,7 +12,7 @@ r'''
  0                    0
 '''
 
-from trapezoidal_rule_functions import simpson_rule
+from .trapezoidal_rule_functions import simpson_rule
 
 
 def simpson_rule_modified(func, a, b, *, n=2, start_eps=1, end_at=1e-15,
@@ -24,12 +26,13 @@ def simpson_rule_modified(func, a, b, *, n=2, start_eps=1, end_at=1e-15,
     Parameters
     ===========
     
-      `n` — initial number of parts.
-      `eps` — positive integer, ...
+      `n`: initial number of parts.
+      `eps`: positive integer, ...
       `mode`: whether print the result.
 
     Return
     ======
+    
       The estimated value of the integra of func from `a' to `b'.
     """
     assert start_eps > 0

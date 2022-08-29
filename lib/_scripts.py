@@ -1,7 +1,7 @@
-"""
-"""
+"""Script.
 
-# Should this file be?
+Work via console. Same stuff, better improvement: result.
+"""
 
 
 import argparse
@@ -9,16 +9,17 @@ import sys
 
 from sympy import *  # tests
 
-from .helpers.graph_builder import main_mod as build_graph
-from .functions import *
-# from _typing import ...  # NoReturn, ...
+from .graph_builder import main_mod as build_graph
+from .interpolate import *
+from ._typing import NoReturn
 
 
-APPROXIMATORS = {'npf': 'newton_polynomial_forward',
-                 'npfe': 'newton_polynomial_forward_equidistant',
-                 'lp': 'lagrange_polynomial',
-                 'cs': 'cubic_spline'
-                 }
+APPROXIMATORS: dict[str, str] = {
+    'npf': 'newton_polynomial_forward',
+    'npfe': 'newton_polynomial_forward_equidistant',
+    'lp': 'lagrange_polynomial',
+    'cs': 'cubic_spline'
+}
 
 
 class CustomFormatter(argparse.RawDescriptionHelpFormatter,
@@ -26,7 +27,7 @@ class CustomFormatter(argparse.RawDescriptionHelpFormatter,
     pass
 
 
-def parse_args(args=sys.argv[1:]):
+def parse_args(args=sys.argv[1:]) -> "Parsed args":
     """Parse arguments."""
     parser = argparse.ArgumentParser(
         description=sys.modules[__name__].__doc__,
@@ -62,22 +63,29 @@ def parse_args(args=sys.argv[1:]):
 
 options = parse_args()
 
-def func_test():
-    from functions import test
+
+def func_test() -> NoReturn:
+    from .interpolate import test
 
     build_option = options.build_option
     if build_option != 'both':
         build_option = eval('build_option')
-    test(eval(options.func), options.borders, eval(APPROXIMATORS[options.approx_by]), options.form_args,
+    test(eval(options.func),
+         options.borders, eval(APPROXIMATORS[options.approx_by]),
+         options.form_args,
          test_in_points=None,
-         build=not options.no_build, build_params={'borders': 0.9, 'times': 100},
+         build=not options.no_build,
+         build_params={'borders': 0.9, 'times': 100},
          build_option=build_option,
          nodes_n=options.nodes_n)
 
 
 def main():
-    """`main` function."""
+    """Main function."""
     func_test()
+
+
+# -- Tests
 
 
 if __name__ == '__main__':

@@ -20,6 +20,7 @@ i = 0
 bar = ttk.Progressbar(root, variable=i, mode='determinate')
 bar.pack()
 
+
 def action():
 	global i
 	while True:
@@ -29,6 +30,7 @@ def action():
 			exit()
 		bar['value'] = i
 		sleep(0.1)
+
 
 # root.after(0, action)
 threading.Thread(target=action).start()

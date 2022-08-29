@@ -1,10 +1,15 @@
-integrate(func(x), x, 0, +oo)
-[x_ = x + 1]
-[func(x)dx = func(x_ - 1)d(x_)]
-integrate(func(x_ - 1), x_, 1, +oo)
-[x__ = 1/x_. Then d(x_)= -1/x__^2*d(x__)]
-[func(x_ - 1)d(x_) = -func(1/x__ - 1)/x__^2*d(x__)]
-integrate(-func(1/x__ - 1)/x__^2, x__, 1, 0)
-integrate(func(1/x__ - 1)/x__^2, x__, 0, 1)
-# NOTE: Here (with x__) 0 can be special.
+This is the note to integrate, here are common calculations
+	(to and of the variable change).
 
+value      integrate(func(x), x, 0, +oo) (=)
+to estim.  =============================
+
+var. c. |  [x_ = x + 1]
+        |  [func(x)dx = func(x_ - 1)d(x_)]
+value     (=) integrate(func(x_ - 1), x_, 1, +oo)
+calc.   |  [x__ = 1/x_. Then d(x_)= -1/x__^2*d(x__)]
+        |  [func(x_ - 1)d(x_) = -func(1/x__ - 1)/x__^2*d(x__)]
+value     (=) integrate(-func(1/x__ - 1)/x__^2, x__, 1, 0)
+value     (=) integrate(func(1/x__ - 1)/x__^2, x__, 0, 1)
+
+# NOTE: Here (with x__) 0 may be special.

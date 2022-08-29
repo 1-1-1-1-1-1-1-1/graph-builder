@@ -1,9 +1,10 @@
-"""Realization of the solving the LAE method(s).
+"""Realization of the solving the System of LAE method(s).
 
 Brief desription
 ================
 
-  Realization of the solving the LAE method(s).
+  Realization of the solving the System of LAE method(s).
+  Implemented method: the iterative method.
 
 Additional data
 ===============
@@ -13,15 +14,20 @@ Additional data
 References
 ==========
 
-  .. [1] ...
+  .. [1] At <lib>[/**]/*docs[/].
 """
 
 
-def iterative_method_solve(matrixA, mB, k):
-	"""Solve the matrix equation Ax=B and return the result.
+from .._typing import Vector
 
-	Implemented method: the iterative method."""
-	# assert 
+
+def iterative_method_solve(matrixA: 'Matrix', mB: Vector, k) -> Vector:
+        """Solve the matrix equation Ax=B and return the result.
+
+	Implemented method: the iterative method.
+	"""
+	from sympy import Matrix
+	
 	if k == 0:
 		return mB
 	n = len(matrixA)
@@ -32,10 +38,10 @@ def iterative_method_solve(matrixA, mB, k):
 		if i == j:
 			return 0
 		return - matrixA[i][j] / matrixA[i][i]
+	
 	alpha = [[_alpha(i, j) for j in range(n)]]
 	beta = [mB[i] / matrixA[i][i] for i in range(n)]
 
-	from sympy import Matrix
 	prev = iterative_method_solve(matrixA, mB, k-1)
 
 	return Matrix(beta) + Matrix(alpha) * prev

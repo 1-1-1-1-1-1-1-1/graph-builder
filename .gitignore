@@ -1,4 +1,5 @@
 # Python byte-complilied etc.
-**/__pycache__/
+__pycache__/
 
-*/storage/other/
+*!not-post/
+*!not-post.*

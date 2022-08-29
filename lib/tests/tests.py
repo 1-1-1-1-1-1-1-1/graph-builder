@@ -20,12 +20,12 @@ from math import *
 from numpy import linspace
 from sympy import lambdify, symbols
 
-from ..spline import cubic_spline
-from ..functions import *
-from ..tdma import *
-from ..helpers import *
-from ..helpers.graph_builder import main, main_mod
-from ..config import INIT_FUNCTION  # Should be so?
+from ..interpolate.spline import cubic_spline
+from ..interpolate import *
+from ..linalg.tdma import *
+from .._helpers import *
+from ..graph_builder import main, main_mod
+from ..config import INIT_FUNCTION
 
 
 ALL_TESTED = [("lagrange_polynomial", "LAGRANGE POLYNOMIAL"),
@@ -183,7 +183,6 @@ def compare_build_speed():
     # Test 3 - to test with list and approximation function.
     import matplotlib.pyplot as plt
 
-
     borders = (-10, 10)
     nodes = chebyshev_nodes(*expand(borders, 1), 10)
     approx = lambda x: lagrange_polynomial(lambda x: eval(INIT_FUNCTION), nodes)(x)
@@ -215,7 +214,6 @@ def local_test():
     """Test something. Should it be?"""
     from math import sin
 
-
     x = linspace(-10, 20, 100)
 
     # func = lambda x1: x1**4+3*x1 + 7 - 8*sin(x1)
@@ -230,6 +228,7 @@ def local_test():
         # print(repr(tmpfunc()))
         lambdified = lambdify(t, tmpfunc, 'numpy')
         print(type(lambdified(x)))
+    
     for i in range(10):
         action(i)
 
@@ -277,6 +276,7 @@ arguments then_.
     
     tmp = symbols('tmp')
     t0 = time()
+    
     def show_time():
         print("Time: {}".format(time() - t0))
 

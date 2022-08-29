@@ -1,7 +1,7 @@
 """Realization of the TDMA.
 
-Brief desription
-================
+Brief description
+=================
 
   Realization of the TDMA.
 
@@ -23,8 +23,8 @@ References
 __all__ = ['solve_tdma', 'solve_tdma_fast']
 
 
-from ._typing import (Union, Generator,
-                     Number, Vector)
+from .._typing import (Union, Generator,
+                       Number, Vector)
 
 
 def solve_tdma(a, b, c, f: Vector) -> Vector:
@@ -100,6 +100,7 @@ def inittest():
 
     times = 1_000_000
     measure_number = 1
+    
     def measure(func, args=(), kwargs={},
                 name='f"Measure number {measure_number}: "',
                 *, _times=times, eval_name=True):
@@ -138,10 +139,12 @@ def inittest():
     c = [3, 1]
     f = [2, 0, 1]
 
-    res = measure(solve_tdma, args=(a, b, c, f), name="Test 1: ", eval_name=False)
+    res = measure(solve_tdma, args=(a, b, c, f), name="Test 1: ",
+                  eval_name=False)
     print(res)
     
-    _res = measure(solve_tdma_fast, args=(a, b, c, f), name="Test 2: ", eval_name=False)
+    _res = measure(solve_tdma_fast, args=(a, b, c, f), name="Test 2: ",
+                   eval_name=False)
     print(list(_res)[::-1])
 
 

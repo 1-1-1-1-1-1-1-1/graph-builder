@@ -12,11 +12,15 @@ def fromCheckToLabel(): # реакция на выбор флажка
  else:
   lblRez['text']='Флажок не выбран'
 
+
 def fromRadioToLabel(): # реакция на выбор элемента из группы
  lblRez['text']='Выбрана кнопка '+str(vr.get())
 
+
 def fromListToLabel(): # реакция на выбор из списка
  lblRez['text']=lstBox.get(lstBox.curselection())
+
+
 # =====================================================
 root=Tk()
 root.title('Demo controls')
@@ -105,7 +109,7 @@ btnCopySpb=Button(lfSpin, bitmap="info",command=getSpbValue )
 btnCopySpb.place(x = 268, y = 4, width = 28, height=28)
 
 # ============ полоса результирующих виджетов ================
-lfRez=LabelFrame(pw,text=' Проверка работы виджетов ',
+lfRez=LabelFrame(pw, text=' Проверка работы виджетов ',
 borderwidth=2,relief=SUNKEN, height=54)
 pw.add(lfRez)
 lblTxtRez=Label(lfRez,text=' Выбор ',font='Arial 10')

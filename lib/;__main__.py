@@ -1,4 +1,4 @@
-'''
+'''# Should have place at the directory when the script-file is made.
 import sys
 
 

@@ -3,11 +3,12 @@ and provides the cubic spline (natural) -- see module `spline`.
 
 Important
 =========
-  NOTE: Use numba.jit (commented) to possibly speed up, if the appropriate
+
+  NOTE: Use `numba.jit' (commented) to possibly speed up, if the appropriate
         software is available on the machine.
 
-Currently realised:
--------------------
+Available:
+----------
 
 `newton_polynomial_forward`,
 `newton_polynomial_forward_equidistant`,
@@ -38,10 +39,10 @@ References:
 # St.#2: `numba` can be used to speed up.
 # Q#1: Should the assertion of a straight nodes' order be?
 # Q#2: What is the difference of Newton forward and str. pol.?
-# A#2: There is not different in classic Python. There is a different, if the
-#      result is being cached: then adding nodes may be faster then without
+# A#2: There is not difference in the classic Python. There is a different, if
+#      the result is being cached: then adding nodes may be faster then without
 #      caching. That way matters, where the nodes are added: left or right.
-#      Depending on this, the function type *matter*.
+#      Depending on this, the function type *matters*.
 
 
 __all__ = [# Newton polynomial:
@@ -61,17 +62,12 @@ from math import pi, cos
 from numpy import linspace
 # import numba
 
-from .helpers import expand, product, displaced_nodes
+from .._helpers import expand, product, displaced_nodes
 from .spline import *
-from ._typing import (Number)
-
-from .spline import __all__ as sp_all
+from .._typing import Number, NumberFunction
 
 
-# From `spline`:
-__all__ += sp_all
-
-del sp_all
+# __all__ += __import__("spline", level=1).__all__
 
 
 def chebyshev_nodes(a, b, n) -> list[Number]:
@@ -85,18 +81,20 @@ def chebyshev_nodes(a, b, n) -> list[Number]:
                 for k in reversed(range(1, n + 1))]
 
 
-def _lagrange_polynomial(func, x_points, x):
+def _lagrange_polynomial(func, x_points, x) -> Number:
     n_ = len(x_points)  # n_ = n + 1
 
-    def basis_polynomial(i):
+    def basis_polynomial(i) -> Number:
         def item(j):
-            return (x - x_points[j]) / (x_points[i] - x_points[j])
+            return ((x - x_points[j]) /
+              # ---------------------------
+                (x_points[i] - x_points[j]))
+        
         return product(item(j) for j in range(n_) if j != i)
 
     return sum(func(x_points[i]) * basis_polynomial(i) for i in range(n_))
 
 
-# Should it be?
 def _finite_diff(func, x_0, h, k, order):
     if order == 0:
         y_k = func(x_0 + h*k)
@@ -106,16 +104,19 @@ def _finite_diff(func, x_0, h, k, order):
     return (_finite_diff(func, x_0, h, k + 1, order)
             - _finite_diff(func, x_0, h, k, order))
 
+
 # @numba.njit()
 def _newton_polynomial_forward_equidistant(func, a, b, n, x):
-    assert a < b  # Does it matter [whether a < b or b < a]?
+    assert a < b
     assert type(n) is int and n > 0
 
     h = (b - a) / n
     q = (x - a) / h
 
     def item(k):
-        return product(q - s for s in range(k)) / product(range(1, k + 1))
+        return (product(q - s for s in range(k)) /
+              # --------------------------------
+                    product(range(1, k + 1)))
 
     def finite_diff(order):  # k = 0
         return _finite_diff(func, a, h, 0, order)
@@ -128,6 +129,7 @@ def _newton_polynomial_forward_equidistant(func, a, b, n, x):
 
     return sum(item(k) * finite_diff(k) for k in range(n + 1))
 
+
 def _newton_polynomial_forward(func, x_points, x, *, version=2.2):
     assert version in [1, 2.1, 2.2] or \
         (type(version) is int and version == 2)
@@ -139,8 +141,9 @@ def _newton_polynomial_forward(func, x_points, x, *, version=2.2):
             if len(points) == 1:
                 return func(points[0])
 
-            return (divided_difference(points[1:]) - divided_difference(points[:-1])) /\
-                        (points[-1] - points[0])
+            return ((divided_difference(points[1:]) - divided_difference(points[:-1])) /
+                  #  ----------------------------------------------------------------
+                                        (points[-1] - points[0]))
 
         def omega(j):
             return product(x - x_points[k] for k in range(j))
@@ -150,22 +153,20 @@ def _newton_polynomial_forward(func, x_points, x, *, version=2.2):
 
     if version == 2.1:
         # Copied from the code, which had been shown on the meeting.
-        # (With only editions to realise style.)
-
-        # Ranges -- ?
+        # (With only editions to the realisation style.)
 
         n_ = len(x_points)
-        xi = x_points  #?
+        xi = x_points
         fi = [func(point) for point in x_points]
         fi1 = [None]*(n_)  # What is it?
-        fd = [None]*(n_)  #?!
+        fd = [None]*(n_)
         for i in range(n_):
             fi1[i] = fi[i]
         for i in range(n_):
             fd[i] = fi1[i]
         for i in range(1, n_):
             for k in range(i, n_):
-                fd[k] = ((fi1[k] - fi1[k-1]) /\
+                fd[k] = ((fi1[k] - fi1[k-1]) /
                        # -------------------
                           (xi[k] - xi[k-i]))
             for k in range(i, n_):
@@ -180,11 +181,11 @@ def _newton_polynomial_forward(func, x_points, x, *, version=2.2):
 
     if version == 2.2:
         n_ = len(x_points)
-        xi = x_points  #?
+        xi = x_points
         fi = [func(point) for point in x_points]
         for i in range(1, n_):
             for k in reversed(range(i, n_)):
-                fi[k] = ((fi[k] - fi[k-1]) /\
+                fi[k] = ((fi[k] - fi[k-1]) /
                        # -----------------
                          (xi[k] - xi[k-i]))
         N = fi[0]
@@ -195,10 +196,11 @@ def _newton_polynomial_forward(func, x_points, x, *, version=2.2):
             N += fi[i] * xx
         return N
 
-    else:  #~
+    else:
         # Another v.:
         raise NotImplementedError
 
+        '''
         values = [func(node) for node in x_points]
         div_differences_0n_1 = [func(points[0])]
         div_differences_1n = [func(points[0])]
@@ -213,6 +215,7 @@ def _newton_polynomial_forward(func, x_points, x, *, version=2.2):
 
         return sum(divided_difference(x_points[:j+1]) * omega(j)
                    for j in range(len(x_points)))
+        '''
 
 '''
 def _newton_polynomial_backward_equidistant(func, a, b, n, x):
@@ -231,22 +234,28 @@ def _newton_polynomial_backward_equidistant(func, a, b, n, x):
     return sum(item(k) * finite_diff(k) for k in range(n + 1))
 '''
 
-def newton_polynomial_forward_equidistant(func, a, b, n) -> callable:
+
+def newton_polynomial_forward_equidistant(func: NumberFunction, a, b, n) \
+    -> NumberFunction:
     """Implement the Newton polynomial for equidistant nodes.
 
     Uses the finite difference. See the `Newton polynomial` folder.
     """
     return lambda x: _newton_polynomial_forward_equidistant(func, a, b, n, x)
 
-def newton_polynomial_forward(func, x_points, *, version=2.2) -> callable:
+
+def newton_polynomial_forward(func: NumberFunction, x_points, *,
+                              version=2.2) \
+    -> NumberFunction:
     """Implement the Newton forward polynomial.
 
     Uses the divided difference. See the `Newton polynomial` folder.
     """
-    return lambda x: _newton_polynomial_forward(func, x_points, x, version=version)
+    return lambda x: _newton_polynomial_forward(func, x_points, x,
+                                                version=version)
 
 
-def lagrange_polynomial(func, x_points) -> callable:
+def lagrange_polynomial(func: NumberFunction, x_points) -> NumberFunction:
     """Implement the Lagrange polynomial."""
     return lambda x: _lagrange_polynomial(func, x_points, x)
 
@@ -258,11 +267,13 @@ def lagrange_polynomial(func, x_points) -> callable:
 #
 # [^1]: Why should this be tested.
 # --------------------------------
-# the Runge's phenomenon happens to the `abs`
-# function (in particular), hence ensuring the function with that function
-# works correctly means the function is preveting the Runge's phenomenon.
+# 
+# > The Runge's phenomenon aplies [1] to the `abs`
+# > function (in particular), hence ensuring the function with that function
+# > works correctly means the function is preveting the Runge's phenomenon.
+#
 # Refering to
-# [Runge's phenomenon](https://en.wikipedia.org/wiki/Runge%27s_phenomenon/).
+# [1] [Runge's phenomenon](https://en.wikipedia.org/wiki/Runge%27s_phenomenon/).
 def test(func: callable, xborders=(-10, 10),
          approx_by=lagrange_polynomial,
          form_args: str = "(chebyshev_nodes(*xborders, nodes_n),)",
@@ -270,7 +281,7 @@ def test(func: callable, xborders=(-10, 10),
          build=True,
          build_params={'borders': 0.9, 'times': 100, 'kwargs': {}},
          build_option='both',
-         *, block=True, nodes_n=10, v=2.2):  # `v` - tmp
+         *, block=True, nodes_n=10, v=2.2):  # 1/2.1/2.2
     assert len(xborders) == 2
 
     extra_kw = dict(version=v) if approx_by \
@@ -285,7 +296,7 @@ def test(func: callable, xborders=(-10, 10),
         print('=' * 42)
 
     if build:
-        from helpers.graph_builder import main_mod
+        from ..graph_builder import main_mod
 
         build_borders = expand(xborders, build_params['borders'])
         times = build_params['times']
@@ -339,6 +350,6 @@ if __name__ == '__main__':
          form_args="(chebyshev_nodes(*xborders, nodes_n),)", v=2.2)
     raise SystemExit
 
-    from helpers.graph_builder import test as test_2
+    from ..graph_builder import test as test_2
 
     test_2([4])

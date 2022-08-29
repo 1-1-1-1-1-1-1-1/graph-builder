@@ -1,7 +1,4 @@
-# * https://en.wikipedia.org/wiki/Gaussian_quadrature
-# (https://ru.wikipedia.org/wiki/Метод_Гаусса_(численное_интегрирование))
-# * https://ru.wikipedia.org/wiki/Алгебраический_порядок_точности_численного_метода
-#
+"""Integrate via the Gauss method."""
 
 
 def _coeffs(n, ntype=None):
@@ -13,6 +10,7 @@ def _coeffs(n, ntype=None):
 		res = map(ntype, res)
 
 	return res
+
 
 def value_generate(func, a=None, b=None, n=None, *, res_coeffs_type=None):
 	if a is None and b is None:
@@ -36,6 +34,7 @@ def value_generate(func, a=None, b=None, n=None, *, res_coeffs_type=None):
 	# --- (f(x_1) + ... + f(x_n))
 	#  n
 
+
 def main():
 	pass
 
@@ -43,11 +42,14 @@ def main():
 if __name__ == '__main__':
 	# from math import sin
 	from sympy import sin
+	
 	func = lambda x: sin(x)/x
 	# print(value_generate(func, 0.1, 2, 70, res_coeffs_type=float))
+	
 	from sympy.abc import a, b
 	from sympy import symbols
 	from sympy import Function  # test
+	
 	func = symbols('f', cls=Function)  # test
 	print(value_generate(func, n=2, res_coeffs_type=None)(a, b))
 

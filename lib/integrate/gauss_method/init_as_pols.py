@@ -14,7 +14,9 @@ def _coeffs(n, *, ntype=None):
 
 	return res
 
-def global_integrate(func, a, b, sep_nodes=None, n=None, ntype=None, integrate_type='auto'):
+
+def global_integrate(func, a, b, sep_nodes=None, n=None, ntype=None,
+                     integrate_type='auto'):
 	raise NotImplementedError
 
 	if integrate_type == 'auto':
@@ -54,6 +56,7 @@ def global_integrate(func, a, b, sep_nodes=None, n=None, ntype=None, integrate_t
 
 			varx = sympy.symbols('x')
 			tmp_func = omega(varx)
+			
 			def c(i):
 				int_func = tmp_func / ((varx-nodes[i])*tmp_func.diff(varx).subs({varx: nodes[i]}))
 				# print(int_func)  # test
@@ -61,9 +64,10 @@ def global_integrate(func, a, b, sep_nodes=None, n=None, ntype=None, integrate_t
 					return sympy.integrate(int_func, (varx, a, b))
 				else:
 					res = quad(lambda var: int_func.subs({varx: var}), a, b)
-					# print(res)  #t
+					# print(res)  # test
 					return res[0]
 			# ---
+			
 			coefficients = [c(i) for i in range(n)]
 
 			for i in range(n):
@@ -79,12 +83,14 @@ def integrate(func, a, b, n, *, ntype=None, integrate_type='auto'):
 
 	Parameters
 	----------
+	
 	`func` : function, type `callable`.
 	`a`, `b` : limits
 	`ntype`
 
 	Return
 	------
+	
 	Approximately estimated integral.
 	"""
 	if integrate_type == 'auto':
@@ -101,6 +107,7 @@ def integrate(func, a, b, n, *, ntype=None, integrate_type='auto'):
 
 	varx = sympy.symbols('x')
 	tmp_func = omega(varx)
+	
 	def c(i):
 		int_func = tmp_func / ((varx-nodes[i])*tmp_func.diff(varx).subs({varx: nodes[i]}))
 		# print(int_func)  # test
@@ -121,14 +128,17 @@ def integrate(func, a, b, n, *, ntype=None, integrate_type='auto'):
 
 # Tests ---
 
+
 def test_1():
-	"""Docs"""
+	"""Docs."""
 	func = sympy.symbols('f', cls=sympy.Function)
 	return integrate(func, -1, 1, n=1)
+
 
 def test_2():
 	func = lambda x: sin(x)
 	return float(integrate(func, 0, pi, 3, ntype=DEFAULT_NTYPE))
+
 
 def test(n, args=(), kwargs={}):
 	pre_name = "test_" + str(n)

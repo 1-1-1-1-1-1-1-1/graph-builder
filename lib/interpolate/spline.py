@@ -1,10 +1,14 @@
-"""This module realises the spline interpolation.
+"""The spline interpolation.
 
-Currently realised spline: natural (`cubic_spline`).
+Realised spline: natural (`cubic_spline`).
 
-    Usage:
+Usage:
     `cubic_spline(<func: callable>, <nodes: iterable>)` ->
         `<function: callable>`.
+
+    where
+        argument is a function being interpolated,
+        and return is an interpolation.
 """
 # TODO: Remake, which was `a(i)`, to be called in more enegry saving way.
 
@@ -14,12 +18,12 @@ __all__ = ['_cubic_spline_natural', 'cubic_spline']
 
 from sympy import symbols, Matrix, solve_linear_system
 
-from .tdma import solve_tdma_fast as tdma
-from ._typing import (Union, NoReturn, Iterable, Callable,
-                      Number, NormalFunc)
+from ..linalg.tdma import solve_tdma_fast as tdma
+from .._typing import (Union, NoReturn, Iterable, Callable,
+                       Number, NumberFunction)
 
 
-def _cubic_spline_natural(func: NormalFunc, nodes: Iterable, x: Number,
+def _cubic_spline_natural(func: NumberFunction, nodes: Iterable, x: Number,
                           *, method=2):
     """Return the cubic spline's value for a given function at point `x`.
 
@@ -30,6 +34,7 @@ def _cubic_spline_natural(func: NormalFunc, nodes: Iterable, x: Number,
 
     def h(i):
         return nodes[i] - nodes[i-1]
+    
     def a(i):
         return func(nodes[i])
 
@@ -54,13 +59,16 @@ def _cubic_spline_natural(func: NormalFunc, nodes: Iterable, x: Number,
                          [1] + [2*(h(i) + h(i+1)) for i in range(1, n)] + [1],
                          [0] + [h(i+1) for i in range(1, n)],
                          part_f))
+        
         def c(i):
             return data[-i-1]
     
     def d(i):
         return (c(i) - c(i-1))/(3*h(i))
+    
     def b(i):
         return (a(i) - a(i-1))/h(i) + (2*c(i) + c(i-1))/3 * h(i)
+    
     def _spline(i):
         tmp = x - nodes[i]
         return a(i) + b(i)*tmp + c(i)*tmp**2 + d(i)*tmp**3
@@ -72,7 +80,8 @@ def _cubic_spline_natural(func: NormalFunc, nodes: Iterable, x: Number,
     return _spline(k)
 
 
-def cubic_spline(func: NormalFunc, nodes: Iterable, *, method=2) -> NormalFunc:
+def cubic_spline(func: NumberFunction, nodes: Iterable, *, method=2) \
+    -> NumberFunction:
     """Return the natural cubic spline."""
     return lambda x: _cubic_spline_natural(func, nodes, x, method=method)
 
@@ -80,9 +89,9 @@ def cubic_spline(func: NormalFunc, nodes: Iterable, *, method=2) -> NormalFunc:
 ### Tests -------
 
 
-from .helpers.graph_builder import main_mod
+from ..graph_builder import main_mod
 
-from .helpers import expand
+from .._helpers import expand
 
 
 INIT_FUNCTION = "exp(sin(x)) - x/2"
@@ -90,7 +99,8 @@ INIT_FUNCTION = "exp(sin(x)) - x/2"
 
 def inittest(func, borders,
              form_space="linspace(*borders, splines_n)",
-             *, splines_n=7, k=1.2, method=2) -> NoReturn:
+             *, splines_n=7, k=1.2, method=2) \
+             -> NoReturn:
     """Build 2 graphs: of `func` and its approximation."""
     space = eval(form_space)
     approx = cubic_spline(func, space, method=method)
@@ -101,7 +111,7 @@ def inittest(func, borders,
     main_mod(space2, [(approx, {'color': 'orange'}), (func, {'color': 'green'})])
 
 
-def test_speed(func, borders, *, k=1, splines_n=20):
+def test_speed(func, borders, *, k=1, splines_n=20) -> NoReturn:
     print("Running test with solving via TDMA.")
     inittest(func, borders, splines_n=splines_n, k=k, method=2)
     print("Running test with solving via `sympy.solve_linear_system`.")
