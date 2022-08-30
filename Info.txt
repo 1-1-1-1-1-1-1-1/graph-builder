@@ -477,3 +477,97 @@
  * Nodes' number: 30.
  * Alpha: 0.4068627451.
 [29.08.2022 19:39:40] The table was built in 1.28 seconds.
+[30.08.2022 03:16:16] Building the graph with following parameters:
+ * function: <function build.<locals>.<lambda> at 0x000001E1706F1D30>
+ * Defined on (-10, 10)
+ * Using `<function lagrange_polynomial at 0x000001E1706E4700>` for interpolating
+ * Forming args as `(chebyshev_nodes(*xborders, nodes_n),)`
+ * Build parameters: {'borders': 1, 'times': 100}
+ * Building the graph of function and its interpolant
+ * Nodes' number: 30.
+[30.08.2022 03:16:16] The graph was built in 0.23 seconds.
+[30.08.2022 03:22:37] Building the graph with following parameters:
+ * function: <function build.<locals>.<lambda> at 0x000002BDF5D01CA0>
+ * Defined on (-10, 10)
+ * Using `<function lagrange_polynomial at 0x000002BDF5CF4670>` for interpolating
+ * Forming args as `(chebyshev_nodes(*xborders, nodes_n),)`
+ * Build parameters: {'borders': 1, 'times': 100}
+ * Building the graph of function and its interpolant
+ * Nodes' number: 30.
+[30.08.2022 03:22:38] The graph was built in 0.25 seconds.
+[30.08.2022 03:23:03] Building the graph with following parameters:
+ * function: <function build.<locals>.<lambda> at 0x0000029DCAE12D30>
+ * Defined on (-10, 10)
+ * Using `<function lagrange_polynomial at 0x0000029DCAE05700>` for interpolating
+ * Forming args as `(chebyshev_nodes(*xborders, nodes_n),)`
+ * Build parameters: {'borders': 1, 'times': 100}
+ * Building the graph of function and its interpolant
+ * Nodes' number: 30.
+[30.08.2022 03:23:03] The graph was built in 0.23 seconds.
+[30.08.2022 03:23:15] Building the graph with following parameters:
+ * function: <function build.<locals>.<lambda> at 0x0000029DD696E280>
+ * Defined on (-10, 10)
+ * Using `<function lagrange_polynomial at 0x0000029DCAE05700>` for interpolating
+ * Forming args as `(chebyshev_nodes(*xborders, nodes_n),)`
+ * Build parameters: {'borders': 1, 'times': 100}
+ * Building the graph of function and its interpolant
+ * Nodes' number: 30.
+[30.08.2022 03:23:15] The graph was built in 0.23 seconds.
+[30.08.2022 03:26:06] Building the graph with following parameters:
+ * function: <function build.<locals>.<lambda> at 0x000001C155822CA0>
+ * Defined on (-10, 10)
+ * Using `<function lagrange_polynomial at 0x000001C155813670>` for interpolating
+ * Forming args as `(chebyshev_nodes(*xborders, nodes_n),)`
+ * Build parameters: {'borders': 1, 'times': 100}
+ * Building the graph of function and its interpolant
+ * Nodes' number: 30.
+[30.08.2022 03:26:06] The graph was built in 0.23 seconds.
+[30.08.2022 03:27:01] Building the table with following parameters:
+ * Function: abs(x)
+ * Defined on (-10, 10)
+ * Using `lagrange_polynomial` for interpolating
+ * Nodes' number: 30.
+ * Alpha: None.
+[30.08.2022 03:33:37] Building the table with following parameters:
+ * Function: abs(x)
+ * Defined on (-10, 10)
+ * Using `lagrange_polynomial` for interpolating
+ * Nodes' number: 30.
+ * Alpha: None.
+[30.08.2022 03:33:41] Building the table with following parameters:
+ * Function: abs(x)
+ * Defined on (-10, 10)
+ * Using `lagrange_polynomial` for interpolating
+ * Nodes' number: 30.
+ * Alpha: None.
+[30.08.2022 03:33:48] The table was built in 7.05 seconds.
+[30.08.2022 03:33:48] The table was built in 11.09 seconds.
+[30.08.2022 03:36:08] Building the graph with following parameters:
+ * function: <function build.<locals>.<lambda> at 0x000001CE23433CA0>
+ * Defined on (-10, 10)
+ * Using `<function lagrange_polynomial at 0x000001CE23425670>` for interpolating
+ * Forming args as `(chebyshev_nodes(*xborders, nodes_n),)`
+ * Build parameters: {'borders': 1, 'times': 100}
+ * Building the graph of function and its interpolant
+ * Nodes' number: 30.
+[30.08.2022 03:36:08] The graph was built in 0.23 seconds.
+[30.08.2022 03:36:12] Building the table with following parameters:
+ * Function: abs(x)
+ * Defined on (-10, 10)
+ * Using `lagrange_polynomial` for interpolating
+ * Nodes' number: 30.
+ * Alpha: None.
+[30.08.2022 03:39:54] Building the table with following parameters:
+ * Function: abs(x)
+ * Defined on (-10, 10)
+ * Using `lagrange_polynomial` for interpolating
+ * Nodes' number: 30.
+ * Alpha: None.
+[30.08.2022 03:39:57] The table was built in 2.97 seconds.
+[30.08.2022 18:27:22] Building the table with following parameters:
+ * Function: abs(x)
+ * Defined on (-10, 10)
+ * Using `lagrange_polynomial` for interpolating
+ * Nodes' number: 30.
+ * Alpha: None.
+[30.08.2022 18:27:28] The table was built in 6.06 seconds.

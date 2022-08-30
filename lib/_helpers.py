@@ -1,7 +1,7 @@
 """Some helpers."""
 
 
-__all__ = ['product', 'displaced_nodes', 'expand', 'mktitle', 'table']
+# __all__ = ['product', 'displaced_nodes', 'expand', 'mktitle', 'table']
 
 
 from typing import Iterable, Tuple, Union, Generator
@@ -141,6 +141,94 @@ def table(lines: Iterable[Tuple], header: Optional[Tuple[str]], sep="=") \
 
     for i, line in enumerate(lines):
         yield normalize(line)
+
+
+# ==== Meta
+
+
+from os.path import isfile, isdir, splitext, abspath, curdir
+from os import chdir, listdir
+import functools
+import re
+from pathlib import Path
+
+from .globalconfig import PACKAGE
+
+
+import configparser
+
+
+c = configparser.ConfigParser()
+
+
+__root = abspath(curdir)
+
+chdir(PACKAGE)
+
+
+__ext = functools.cache(lambda path: splitext(path)[1])
+
+
+def _wbyext(path): return __ext(path) == '.pyw'
+
+
+def _wbyname(path): return 'window' in path.lower()
+
+
+def _ispypath(path): return re.fullmatch(r"\.py.*", __ext(path))
+
+
+ispypath = lambda path: isfile(path) and _ispypath(path)
+
+
+_possible = filter(lambda path: ispypath(path)
+                   and (_wbyext(path) or _wbyname(path)),
+                   listdir(curdir))
+_possible = list(_possible)
+
+if not _possible:
+    raise SystemExit("Window's file not found.")
+elif len(_possible) > 1:
+    possible = tuple(filter(_wbyname, _possible))
+    if len(_possible) != 1:
+        possible = tuple(filter(_wbyext, possible))
+        if len(_possible) != 1:
+            raise SystemExit("File's name has not been detected.")
+
+__fname = splitext(_possible[0])[0]
+
+chdir(__root); del __root
+_WINDOWCONFIG = Path(PACKAGE) / f'{__fname}.ini'
+c.read(_WINDOWCONFIG, encoding='utf-8')
+print(_WINDOWCONFIG)
+del functools, re, chdir, curdir, listdir, __fname
+
+
+def get_default(section, obj, *, option='default') \
+    -> Optional['section[option]']:
+    """Internal function.
+
+    Get the default value for [({from the})] the .ini-config-file.
+    
+    Return
+    ======
+    
+     - `section[option]`, if `section[option]` may be transformed to integer,
+     - `None` if
+         + either `section[option]` is not accissible,
+         + or `section[option]` may be not transformed to `int`.
+    """
+    _default = section[option]
+    try:
+        _default = int(_default)
+        return obj[_default]
+    except:
+        try:
+            assert eval(_default) is None
+            return eval(_default)
+        except:
+            pass
+        return _default
 
 
 # -- Tests -------

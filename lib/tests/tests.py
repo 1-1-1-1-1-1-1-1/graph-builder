@@ -128,15 +128,15 @@ def whole_test(borders=(-10, 10), n: int = 30, alpha=0.5,
         c2 = __import__("configparser").ConfigParser()  # <Comment>
         c.read('tmp_configs.ini')
         section = _id
-        with open('tmp_configs.ini', 'w') as f:
+        with open(TMP_CONFIGS, 'w') as f:
             c.write(f)
 
-        def ini_set(value):  # `section` can be absent... # Or not?
+        def ini_set(value):  # Q.: May `section` be absent?
             # Only one exact config. is here, so reading is not required
             # each time. That config. is modified only here, in theory.
             # c.read('tmp_configs.ini')
             c[section]['done'] = str(value)
-            with open('tmp_configs.ini', 'w') as f:
+            with open(TMP_CONFIGS, 'w') as f:
                 c.write(f)
 
         def is_interrupted():
@@ -264,7 +264,7 @@ def test_builder(func, _n, testrange):
                       for n in testrange], form_type=[1, 2, 'default'][_n], show=False)
 
 
-# Was at 'functions.py':
+# Was at '~/interpolate':
 def test_local(*, func=lambda x: x):
     """Compare the speed of two methods: _calling the interpolator each
 time and forming a sympy-function_ and _just calling it with required
@@ -296,7 +296,7 @@ arguments then_.
     raise SystemExit
 
 
-# Was at `functions.py` and edited:
+# Was at `~/functions` and has been edited:
 def null_test():
     from helpers.graph_builder import main as build
 

@@ -73,48 +73,16 @@ from .addings import weierstrass_function
 from .tests.tests import whole_test as _print_table
 from .config import INIT_FUNCTION, package
 from ._typing import Optional, NoReturn
+from ._helpers import *
+from ._helpers import c
 
 
 __COPYRIGHT = "Copyright (c) The Student Mykola Heneralov, y. 2020–2022"
 
 
-c = configparser.ConfigParser()
-
-
-__fname = __name__.rsplit(".", maxsplit=1)[-1]
-_WINDOWCONFIG = Path(package) / f'{__fname}.ini'
-c.read(_WINDOWCONFIG, encoding='utf-8')
-del __fname
-
-
 # Function
 DEFAULT_FUNCTIONS = eval(
     c['function_defaults']['displayable'].replace("\n", ""))
-
-
-def get_default(section, obj, *, option='default') \
-    -> Optional['section[option]']:
-    """Internal function.
-
-    Return
-    ======
-    
-     - `section[option]`, if `section[option]` may be transformed to integer,
-     - `None` if
-         + either `section[option]` is not accissible,
-         + or `section[option]` may be not transformed to `int`.
-    """
-    _default = section[option]
-    try:
-        _default = int(_default)
-        return obj[_default]
-    except:
-        try:
-            assert eval(_default) is None
-            return eval(_default)
-        except:
-            pass
-        return _default
 
 
 DEFAULT_FUNCTION = get_default(c['function_defaults'], DEFAULT_FUNCTIONS)
@@ -361,7 +329,8 @@ Try to use `newton_polynomial_forward` instead.")
         log_info(error_m)
         mbox.showerror("Error", error_m)
 
-    with OutputInterceptor() as output:
+    with OutputInterceptor() as output, \
+         open(TMP_CONFIGS, "w", encoding='utf-8') as f:
         infow = Tk()
         infow.title("Building information")
         infow.wm_attributes('-topmost', 1)
@@ -374,8 +343,7 @@ Try to use `newton_polynomial_forward` instead.")
         if not c.has_section(section):
             c.add_section(section)
         c.set(section, 'done', '0')
-        with open(TMP_CONFIGS, 'w', encoding='utf-8') as f:
-            c.write(f)
+        c.write(f)
 
         interrupted = False
         finished = False
@@ -384,8 +352,7 @@ Try to use `newton_polynomial_forward` instead.")
             nonlocal interrupted
             interrupted = True
             c[section]['interrupted'] = 'yes'
-            with open(TMP_CONFIGS, 'w') as f:
-                c.write(f)
+            c.write(f)
         
         def track_interrupted():
             if interrupted:
@@ -450,12 +417,13 @@ Try to use `newton_polynomial_forward` instead.")
         finally:
             c.read(TMP_CONFIGS)
             for s in c.sections():
-                c.remove_section(s)
-            with open(TMP_CONFIGS, 'w') as f:
-                c.write(f)
+                c.remove_section(s)            
+            c.write(f)
 
         if interrupted:
             return
+
+    remove(TMP_CONFIGS); print("Yes!")
     
     # Copied from https://younglinux.info/tkinter/text.php:
     root = Tk()
@@ -764,7 +732,7 @@ print_table_button = Button(table_print, text='Print table',
     command=print_table)
 print_table_button.pack()
 
-# Other config.:
+# Other configurations:
 configurations = LabelFrame(pw, text=' Other configurations ',
     borderwidth=2, relief=SUNKEN, height=54)
 pw.add(configurations)
