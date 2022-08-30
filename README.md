@@ -29,10 +29,7 @@ A tool (GUI) for
  ❗🧐 Probably, might work on Mac, the `key_bindings` file may be modified in order to set the appropriate key bindings.
 
 [![Python 3.10+](https://img.shields.io/badge/Py-3.10%2B-red)](https://www.python.org/)
-[![GUI Math](https://img.shields.io/badge/GUI-Math-green)](./__init__.py)
-
-// label: Python: `>=3.10` (require 'f'-strings, also several 'typing' features).
-OS: Windows? (Possibly, may be transformed to the \*nix+Mac via edition).
+[![GUI Math](https://img.shields.io/badge/GUI-Math-green)](/__init__.py)
 
 ### Navigation
 <a id="navigation"></a>

@@ -28,6 +28,9 @@ from ..graph_builder import main, main_mod
 from ..config import INIT_FUNCTION
 
 
+TMP_CONFIGS = 'tmp_configs.ini?'[:-2]
+
+
 ALL_TESTED = [("lagrange_polynomial", "LAGRANGE POLYNOMIAL"),
               ("newton_polynomial_forward", "NEWTON FORWARD POLYNOMIAL"),
               ("cubic_spline", "NATURAL CUBIC SPLINE")
@@ -78,7 +81,7 @@ def inittest_table(_func, x_points, *, by_func="lagrange_polynomial",
 
 
 # Earlier was at `__init__.py`:
-def single_test(number):
+def single_test(number) -> callable:
     def single_test_1(func=sin):
         print(lagrange_polynomial(func, linspace(0, pi, 11))(0.1))
 
@@ -126,7 +129,7 @@ def whole_test(borders=(-10, 10), n: int = 30, alpha=0.5,
     def one_test(header, by_func):
         c = __import__("configparser").ConfigParser()  # ... . For the action in `inwindow`.
         c2 = __import__("configparser").ConfigParser()  # <Comment>
-        c.read('tmp_configs.ini')
+        c.read(TMP_CONFIGS)
         section = _id
         with open(TMP_CONFIGS, 'w') as f:
             c.write(f)
@@ -135,7 +138,10 @@ def whole_test(borders=(-10, 10), n: int = 30, alpha=0.5,
             # Only one exact config. is here, so reading is not required
             # each time. That config. is modified only here, in theory.
             # c.read('tmp_configs.ini')
-            c[section]['done'] = str(value)
+            try:
+                c[section]['done'] = str(value)
+            except:
+                pass
             with open(TMP_CONFIGS, 'w') as f:
                 c.write(f)
 

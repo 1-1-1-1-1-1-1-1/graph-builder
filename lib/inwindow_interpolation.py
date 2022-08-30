@@ -71,7 +71,7 @@ from .interpolate import *
 from .interpolate import test as _build
 from .addings import weierstrass_function
 from .tests.tests import whole_test as _print_table
-from .config import INIT_FUNCTION, package
+from .config import INIT_FUNCTION, PACKAGE
 from ._typing import Optional, NoReturn
 from ._helpers import *
 from ._helpers import c
@@ -117,7 +117,7 @@ LOGGING_FILE = section['logging_file']
 
 TMP_CONFIGS = section['tmp_configs']
 
-KEY_BINDINGS_FILE = Path(package) / section['key_bindings']
+KEY_BINDINGS_FILE = Path(PACKAGE) / section['key_bindings']
 
 assert GRAPH_MODE_DEFAULT in GRAPH_MODES_POSSIBLE
 
@@ -423,7 +423,7 @@ Try to use `newton_polynomial_forward` instead.")
         if interrupted:
             return
 
-    remove(TMP_CONFIGS); print("Yes!")
+    __import__("time").sleep(1);remove(TMP_CONFIGS); print("Yes!")
     
     # Copied from https://younglinux.info/tkinter/text.php:
     root = Tk()

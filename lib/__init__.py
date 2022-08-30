@@ -1,9 +1,9 @@
 # Make this folder a package.
 
 
-from .config import package
+from .config import PACKAGE
 
 
-exec(f"import {package}.\
+exec(f"import {PACKAGE}.\
 inwindow_interpolation")
 

@@ -10,10 +10,10 @@ Important
 Available:
 ----------
 
-`newton_polynomial_forward`,
-`newton_polynomial_forward_equidistant`,
-`lagrange_polynomial`,
-`cubic_spline`.
+ - `newton_polynomial_forward`,
+ - `newton_polynomial_forward_equidistant`,
+ - `lagrange_polynomial`,
+ - `cubic_spline`.
 
     Usage:
     ======

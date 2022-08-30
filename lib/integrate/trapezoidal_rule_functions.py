@@ -14,7 +14,7 @@
 # Questions
 # =========
 # 
-# * In this counts: v_1 or v_2? What value is better to return?
+#  * In this counts: v_1 or v_2? What value is better to return?
 
 
 # __all__ = []
