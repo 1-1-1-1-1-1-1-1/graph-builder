@@ -18,7 +18,7 @@ A tool (GUI) for
 
  - the build of graphs of mathematical functions (ℝ $\to$ ℝ), including
       + interpolation (with the GUI at Tk/Tcl-window!),
-	  + solving the system of linear equation (SLE's),
+	  + solving the system of linear equations (SLE's),
 	  + etc., in addition.
 
 ✅ Contains the tools to build graphs, integrate, interpolate, solve the system of LAEs.
