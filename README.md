@@ -3,12 +3,13 @@
 
 ## Table of contents
 
+✅ Build the graphics functions
+
  - [Brief description](#brief-description)
- - ...
  - [Navigation](#navigation)
  - [References](#references)
 
-![Window working example](/lib/Docs/images/window)
+![Window working example](/lib/Docs/images/window.jpg)
 
 ### Brief description
 <a id="brief-description"></a>
@@ -20,8 +21,9 @@ A tool (GUI) for
 	  + solving the system of linear equation (SLE's),
 	  + etc., in addition.
 
-✔ Contains the tools to build graphs, integrate, interpolate, solve the system of LAEs.
-✔ Few tools in addition.
+✅ Contains the tools to build graphs, integrate, interpolate, solve the system of LAEs.
+
+✔️ Few tools in addition.
 
 🚀🤔✔️ Was developed for the OS Windows (and tested on Win. 10), might not work on another systems.
  ❗🧐 Probably, might work on Mac, the `key_bindings` file may be modified in order to set the appropriate key bindings.

@@ -1,4 +1,6 @@
 Screenshot 3:
+-------------
+
 func = weierstrass_function(3, 1/2, 100)
 build(linspace(-2, 2, 1000), [(func, {})])
 

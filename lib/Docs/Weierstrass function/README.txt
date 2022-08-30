@@ -15,6 +15,7 @@ build(linspace(-2, 2, 1000), [lagrange_polynomial(func, space)])
 
 Figure_2:
 ---------
+
 func = display(3.0, 1/2, borders=(-2, 2))  # maxn = "default"
 
 space = chebyshev_nodes(-2, 2, 200)
